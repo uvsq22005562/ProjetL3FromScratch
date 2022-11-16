@@ -1,7 +1,6 @@
 use clap::Parser;
-use std::path::Path;
-use projet_L3_2::cli::Cli;
-use projet_L3_2::scan::scan;
+use projet_l3_2::cli::Cli;
+use projet_l3_2::scan::scan;
 // fichier principal
 
 fn main() {

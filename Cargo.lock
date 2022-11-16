@@ -186,7 +186,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "projet_L3_2"
+name = "projet_l3_2"
 version = "0.1.0"
 dependencies = [
  "clap",
