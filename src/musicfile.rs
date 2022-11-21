@@ -1,6 +1,7 @@
 use std::path::{Path, PathBuf};
 use id3::{Tag, TagLike};
 use serde_json;
+// use serde::{Serialize};
 
 // structure de base
 #[derive(Debug)]
@@ -21,19 +22,11 @@ impl MusicFile {
         // !!! on obtient pas les metadata classiques -> a ajouter plus tard.
         let tag = Tag::read_from_path(path).unwrap();
 
-        // tout une série de test pour arriver a écrire dans un json
-        let mut newpath: PathBuf = PathBuf::new();
-        newpath.push("src/test/testjson.json");
-        match std::fs::write(&newpath, Self::generate_str(&path)) {
-            Err(e) => println!("{:?}", e),
-            Ok(_o) => println!("succed at writting into json")
-        }
-        println!("{:?}", tag.frames().count());
         // gros print bien moche qui sert pour observer la construction de tag
         // println!("{:?}", tag);
 
         // retourne le constructeur
-        MusicFile {
+        let result: MusicFile = MusicFile {
             path: path.to_path_buf(),
             artist : if tag.clone().get("TPE1").is_some() {
                 tag.clone().get("TPE1").unwrap().content().
@@ -55,14 +48,33 @@ impl MusicFile {
                 tag.clone().get("TRCK").unwrap().content().
                     text().unwrap().to_string()
             } else {"inconnu".to_string()},
+        };
+        // tout une série de test pour arriver a écrire dans un json
+        let mut newpath: PathBuf = PathBuf::new();
+        newpath.push("src/test/testjson.json");
+        match std::fs::write(&newpath, Self::generate_str(&result)) {
+            Err(e) => println!("{:?}", e),
+            Ok(_o) => println!("succed at writting into json")
         }
+        println!("{:?}", tag.frames().count());
+        result
     }
 
-    pub fn generate_str(path: &Path) -> String {
+    pub fn generate_str(item: &MusicFile) -> String {
         let mut mystring:String = String::new();
-        mystring.push_str("{\"path\": ");
-        mystring.push_str(&serde_json::to_string(path).unwrap());
-        mystring.push_str("}");
+        mystring.push_str("{\n    \"path\": ");
+        mystring.push_str(&serde_json::to_string(&item.path).unwrap());
+        mystring.push_str(",\n    \"album\": ");
+        mystring.push_str(&serde_json::to_string(&item.album).unwrap());
+        mystring.push_str(",\n    \"artist\": ");
+        mystring.push_str(&serde_json::to_string(&item.artist).unwrap());
+        mystring.push_str(",\n    \"title\": ");
+        mystring.push_str(&serde_json::to_string(&item.title).unwrap());
+        mystring.push_str(",\n    \"year\": ");
+        mystring.push_str(&serde_json::to_string(&item.year).unwrap());
+        mystring.push_str(",\n    \"numero\": ");
+        mystring.push_str(&serde_json::to_string(&item.numero).unwrap());
+        mystring.push_str("\n}");
         mystring
     }
 }
