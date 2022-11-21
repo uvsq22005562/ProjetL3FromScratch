@@ -1,6 +1,8 @@
 use walkdir::{DirEntry, WalkDir};
-use std::path::Path;
 use crate::musicfile::MusicFile;
+use std::path::{Path, PathBuf};
+use std::fs::OpenOptions;
+use std::io::Write;
 
 //liste des formats supportés (voir possibilité de séléction avec arg
 const SUPPORTED_EXT: [&str; 1] = ["mp3"];
@@ -25,4 +27,27 @@ pub fn scan(path: &Path) -> Vec<MusicFile> {
         }
     }
     files // retourne le vecteur
+}
+
+pub fn write2json(data: &Vec<MusicFile>){
+    // création du chemin vers le fichier cible json (!!! rajouter création si fichier inexistant)
+    let mut newpath: PathBuf = PathBuf::new();
+    newpath.push("src/test/stored_metadata.json");
+    let mut metadata_vec:Vec<String> = Vec::new();
+    // génération des strings pour chaque fichier mp3 trouvé
+    for elm in data {
+        metadata_vec.push(MusicFile::generate_str(&elm));
+    }
+    // écriture
+    let mut file = OpenOptions::new().write(true).open(newpath).expect("Cannot Open");
+    // ouverture de la syntaxe json
+    file.write_all("{\n    \"mp3 files\" :[\n".as_bytes());
+    // écriture des metadata
+    while metadata_vec.len() != 1 {
+        file.write_all(metadata_vec.pop().unwrap().as_bytes());
+        file.write_all(",\n".as_bytes());
+    }
+    file.write_all(metadata_vec.pop().unwrap().as_bytes());
+    // fermeture de la syntaxe json
+    file.write_all("\n    ]\n}".as_bytes());
 }
