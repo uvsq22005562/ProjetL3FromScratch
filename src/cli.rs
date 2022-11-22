@@ -5,6 +5,6 @@ use clap::Parser;
 pub struct Cli {
     // premier argument
     pub command: String,
-    // second argument
-    pub path: std::path::PathBuf,
+    // second argument (scan -> path) (search -> filter)
+    pub arg2: Option<String>,
 }

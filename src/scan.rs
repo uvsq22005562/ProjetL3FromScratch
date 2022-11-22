@@ -16,6 +16,7 @@ fn is_supported(entry: &DirEntry) -> bool {
 // fonction de scan - retourne directement le vecteur utilisé dans le main
 pub fn scan(path: &Path) -> Vec<MusicFile> {
     // création du vecteur
+    let mut count:i32 = 0;
     let mut files = Vec::new();
     // énumération sur la récurcion de walkdir (passage récursice sur tout les elm contenu dans le path)
     for entry in WalkDir::new(path) {
@@ -24,8 +25,10 @@ pub fn scan(path: &Path) -> Vec<MusicFile> {
         if is_supported(&temp) {
             // création d'une musicfile avec le path en argument -> ajout dans le vecteur
             files.push(MusicFile::new(temp.path()));
+            count += 1;
         }
     }
+    println!("{} fichier trouvé", count);
     files // retourne le vecteur
 }
 
@@ -41,13 +44,28 @@ pub fn write2json(data: &Vec<MusicFile>){
     // écriture
     let mut file = OpenOptions::new().write(true).open(newpath).expect("Cannot Open");
     // ouverture de la syntaxe json
-    file.write_all("{\n    \"mp3 files\" :[\n".as_bytes());
+    match file.write_all("{\n    \"mp3 files\" :[\n".as_bytes()) {
+        Err(e) => println!("{:?}", e),
+        _=> ()
+    }
     // écriture des metadata
     while metadata_vec.len() != 1 {
-        file.write_all(metadata_vec.pop().unwrap().as_bytes());
-        file.write_all(",\n".as_bytes());
+        match file.write_all(metadata_vec.pop().unwrap().as_bytes()) {
+            Err(e) => println!("{:?}", e),
+            _=> ()
+        }
+        match file.write_all(",\n".as_bytes()) {
+            Err(e) => println!("{:?}", e),
+            _=> ()
+        }
     }
-    file.write_all(metadata_vec.pop().unwrap().as_bytes());
+    match file.write_all(metadata_vec.pop().unwrap().as_bytes()) {
+        Err(e) => println!("{:?}", e),
+        _=> ()
+    }
     // fermeture de la syntaxe json
-    file.write_all("\n    ]\n}".as_bytes());
+    match file.write_all("\n    ]\n}".as_bytes()) {
+        Err(e) => println!("{:?}", e),
+        _=> ()
+    }
 }
