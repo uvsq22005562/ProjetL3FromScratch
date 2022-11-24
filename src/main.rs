@@ -1,7 +1,7 @@
 use clap::Parser;
 use projet_l3_2::cli::Cli;
 use projet_l3_2::scan::{scan, write2json};
-use projet_l3_2::search::get_stored_metadata;
+use projet_l3_2::search::search;
 use std::path::PathBuf;
 
 
@@ -17,6 +17,6 @@ fn main() {
         let music_files = scan(&temp_path);
         write2json(&music_files);
     } else if args.command == "search" {
-        get_stored_metadata()
+        search(args.arg2.unwrap());
     }
 }
