@@ -15,8 +15,9 @@ fn main() {
         temp_path.push(args.arg2.unwrap());
         // création du vect contenant tout les fichiers supportés
         let music_files = scan(&temp_path);
-        write2json(&music_files);
+        write2json(music_files);
     } else if args.command == "search" {
-        search(args.arg2.unwrap());
+        let x = search(args.arg2.unwrap());
+        println!("{:?}", x);
     }
 }

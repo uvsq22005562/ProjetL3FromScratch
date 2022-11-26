@@ -1,9 +1,8 @@
 use walkdir::{DirEntry, WalkDir};
-use crate::musicfile::MusicFile;
+use crate::musicfile::{MFContainer, MusicFile};
 use std::path::{Path, PathBuf};
 use std::fs::OpenOptions;
 use std::io::Write;
-use serde_json::Serializer;
 
 //liste des formats supportés (voir possibilité de séléction avec arg
 const SUPPORTED_EXT: [&str; 1] = ["mp3"];
@@ -15,63 +14,32 @@ fn is_supported(entry: &DirEntry) -> bool {
 }
 
 // fonction de scan - retourne directement le vecteur utilisé dans le main
-pub fn scan(path: &Path) -> Vec<MusicFile> {
+pub fn scan(path: &Path) -> MFContainer {
     // création du vecteur
     let mut count:u32 = 0;
-    let mut files = Vec::new();
-    // énumération sur la récurcion de walkdir (passage récursice sur tout les elm contenu dans le path)
+    let mut container:MFContainer = MFContainer::new();
+    // énumération sur la recursion de walkdir (passage recursive sur tout les elm contenu dans le path)
     for entry in WalkDir::new(path) {
         let temp = entry.as_ref().unwrap();
         // vérification du support du fichier
         if is_supported(&temp) {
             // création d'une musicfile avec le path en argument -> ajout dans le vecteur
-            files.push(MusicFile::new(temp.path()));
+            let y = MusicFile::new(temp.path());
+            container.add(y);
             count += 1;
         }
     }
     println!("{} fichier trouvé", count);
-    files // retourne le vecteur
+    container // retourne le vecteur
 }
 
-pub fn write2json(data: &Vec<MusicFile>){
-    // création du chemin vers le fichier cible json (!!! rajouter création si fichier inexistant)
-    let mut newpath: PathBuf = PathBuf::new();
-    newpath.push("src/test/stored_metadata.json");
-    let mut metadata_vec:Vec<String> = Vec::new();
-    // génération des strings pour chaque fichier mp3 trouvé
-    for elm in data {
-        metadata_vec.push(MusicFile::generate_str(&elm));
-    }
-    // écriture
-    let mut file = OpenOptions::new().write(true).open(newpath).expect("Cannot Open");
-    // ouverture de la syntaxe json
-    match file.write_all("{\n    \"mp3 files\" :[\n".as_bytes()) {
+pub fn write2json(data: MFContainer) {
+    let mut new_path: PathBuf = PathBuf::new();
+    new_path.push("src/test/stored_metadata.json");
+    let mut file = OpenOptions::new().write(true).open(new_path).expect("Cannot Open");
+    match file.write_all(serde_json::to_string(&data).unwrap().as_bytes()) {
         Err(e) => println!("{:?}", e),
         _=> ()
     }
-    // écriture des metadata
-    while metadata_vec.len() != 1 {
-        match file.write_all(metadata_vec.pop().unwrap().as_bytes()) {
-            Err(e) => println!("{:?}", e),
-            _=> ()
-        }
-        match file.write_all(",\n".as_bytes()) {
-            Err(e) => println!("{:?}", e),
-            _=> ()
-        }
-    }
-    match file.write_all(metadata_vec.pop().unwrap().as_bytes()) {
-        Err(e) => println!("{:?}", e),
-        _=> ()
-    }
-    // fermeture de la syntaxe json
-    match file.write_all("\n    ]\n}".as_bytes()) {
-        Err(e) => println!("{:?}", e),
-        _=> ()
-    }
-}
-
-pub fn write2json_v2(data: MusicFile) {
-    let mut newpath: PathBuf = PathBuf::new();
-    newpath.push("src/test/stored_metadata2.json");
+    // let deserialized_mf:Result<MusicFile, serde_json::Error> = serde_json::from_str(&serialized_mf);
 }

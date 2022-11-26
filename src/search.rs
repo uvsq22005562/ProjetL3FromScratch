@@ -1,65 +1,37 @@
-use std::path::{Path, PathBuf};
-use std::{fs, vec};  // file system btw
-use std::str::Split;
-use clap::builder::Str;
+use std::path::{PathBuf};
+use std::{fs};  // file system btw
+use crate::musicfile::MFContainer;
 
-
-pub fn get_stored_metadata() -> String {
-    let mut newpath: PathBuf = PathBuf::new();
-    newpath.push("src/test/stored_metadata.json");
-    let content:String = fs::read_to_string(newpath).unwrap();
-    content
-    /*for i in c {
-        for x in &i {
-            println!("{:?}", x);
-        }
-    }*/
-}
-
-pub fn separate_content(ct: String) -> Vec<Vec<String>> {
-    let iterator = ct.split("\n");
-    let mut result = Vec::new();
-    let mut temp = Vec::new();
-    for x in iterator {
-        if x.contains("\",") {
-            temp.push(x.clone().to_string());
-        }
-        if x.contains("numero") {
-            result.push(temp.clone());
-            temp = Vec::new();
-        }
-    }
-    result
-}
 
 pub fn arg_read(arg: String) -> Vec<String> {
     let mut res = Vec::new();
     for values in arg.split("=") {
-        res.push(values.to_string().clone());
+        res.push(values.clone().to_string());
     }
-    println!("{:?}", res);
     res
 }
 
-pub fn search(arg: String) {
-    let content = separate_content(get_stored_metadata());
+pub fn get_metadata() -> MFContainer {
+    let mut new_path = PathBuf::new();
+    new_path.push("src/test/stored_metadata.json");
+    let data = fs::read_to_string(new_path).unwrap();
+    let container:MFContainer = serde_json::from_str(&data).unwrap();
+    container
+}
+
+pub fn search(arg: String) -> MFContainer {
     let argument = arg_read(arg);
-    let mut temp_path:Vec<String> = Vec::new(); // buff all path while parsing
-    let mut select:Vec<String> = Vec::new();
-    for sub_content in content {
-        if temp_path.len() != 0 {
-            let _ = temp_path.pop();
-        }
-        for line in &sub_content {
-            if line.contains("path") {
-                //temp_path.push();
-                println!("{:?}", line.split("\","));
-            }
-            if line.contains(&argument[0]) && line.contains(&argument[1]) {
-                select = sub_content.clone();
-                println!("{:?}", select);
-            }
+    let data = get_metadata();
+    let mut result:MFContainer = MFContainer::new();
+    for elm in data.file {
+        match argument[0].as_str() {
+            "album" => if &elm.album == &argument[1]{result.add(elm)},
+            "artist" => if &elm.artist == &argument[1]{result.add(elm)},
+            "title" => if &elm.title == &argument[1]{result.add(elm)},
+            "year" => if &elm.year == &argument[1]{result.add(elm)},
+            "numero" => if &elm.numero == &argument[1]{result.add(elm)},
+            _ => continue
         }
     }
-
+    result
 }
