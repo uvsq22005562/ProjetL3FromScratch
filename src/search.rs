@@ -1,9 +1,10 @@
 use std::path::{PathBuf};
 use std::{fs};  // file system btw
+use crate::m2d::search_to_md2;
 use crate::musicfile::MFContainer;
 
 
-pub fn arg_read(arg: String) -> Vec<String> {
+pub fn arg_read(arg: &String) -> Vec<String> {
     let mut res = Vec::new();
     for values in arg.split("=") {
         res.push(values.clone().to_string());
@@ -19,19 +20,22 @@ pub fn get_metadata() -> MFContainer {
     container
 }
 
-pub fn search(arg: String) -> MFContainer {
-    let argument = arg_read(arg);
+pub fn search(arg: String, write:bool) -> MFContainer {
+    let mut count:u32 = 0;
+    let argument = arg_read(&arg);
     let data = get_metadata();
     let mut result:MFContainer = MFContainer::new();
     for elm in data.file {
         match argument[0].as_str() {
-            "album" => if &elm.album == &argument[1]{result.add(elm)},
-            "artist" => if &elm.artist == &argument[1]{result.add(elm)},
-            "title" => if &elm.title == &argument[1]{result.add(elm)},
-            "year" => if &elm.year == &argument[1]{result.add(elm)},
-            "numero" => if &elm.numero == &argument[1]{result.add(elm)},
+            "album" => if &elm.album == &argument[1]{result.add(elm); count +=1;},
+            "artist" => if &elm.artist == &argument[1]{result.add(elm); count +=1;},
+            "title" => if &elm.title == &argument[1]{result.add(elm); count +=1;},
+            "year" => if &elm.year == &argument[1]{result.add(elm); count +=1;},
+            "numero" => if &elm.numero == &argument[1]{result.add(elm); count +=1;},
             _ => continue
         }
     }
+    if write {search_to_md2(arg, &result, count)}
     result
+
 }

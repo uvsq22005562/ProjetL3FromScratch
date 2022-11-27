@@ -7,5 +7,6 @@ pub struct Cli {
     pub command: String,
     // second argument (scan -> path) (search -> filter)
     pub arg2: Option<String>,
+    // 3rd argument w -> écrire dans un md le résultat de la requête
     pub arg3: Option<String>
 }

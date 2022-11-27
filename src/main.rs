@@ -3,6 +3,7 @@ use projet_l3_2::cli::Cli;
 use projet_l3_2::scan::{scan, write2json};
 use projet_l3_2::search::search;
 use std::path::PathBuf;
+use std::panic;
 
 
 fn main() {
@@ -14,10 +15,24 @@ fn main() {
         let mut temp_path = PathBuf::new();
         temp_path.push(args.arg2.unwrap());
         // création du vect contenant tout les fichiers supportés
-        let music_files = scan(&temp_path);
-        write2json(music_files);
+        match &args.arg3 {
+            Some(s) => { match s as &str {
+                "w" => {let x = scan(&temp_path, true);
+                write2json(x);},
+                _ => panic!("invalide 3rd argument -> type w to write the request into md"),
+            }
+            },
+            None => {let x = scan(&temp_path, false);
+                write2json(x);}
+        }
     } else if args.command == "search" {
-        let x = search(args.arg2.unwrap());
-        println!("{:?}", x);
+        match &args.arg3 {
+            Some(s) => { match s as &str {
+                "w" => {search(args.arg2.unwrap(), true);},
+                _ => panic!("invalide 3rd argument -> type w to write the request into md"),
+            }
+                },
+            None => {search(args.arg2.unwrap(), false);}
+        }
     }
 }

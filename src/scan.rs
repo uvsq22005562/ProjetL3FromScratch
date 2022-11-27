@@ -3,6 +3,7 @@ use crate::musicfile::{MFContainer, MusicFile};
 use std::path::{Path, PathBuf};
 use std::fs::OpenOptions;
 use std::io::Write;
+use crate::m2d::scan_to_md2;
 
 //liste des formats supportés (voir possibilité de séléction avec arg
 const SUPPORTED_EXT: [&str; 1] = ["mp3"];
@@ -14,7 +15,7 @@ fn is_supported(entry: &DirEntry) -> bool {
 }
 
 // fonction de scan - retourne directement le vecteur utilisé dans le main
-pub fn scan(path: &Path) -> MFContainer {
+pub fn scan(path: &Path, write:bool) -> MFContainer {
     // création du vecteur
     let mut count:u32 = 0;
     let mut container:MFContainer = MFContainer::new();
@@ -29,7 +30,7 @@ pub fn scan(path: &Path) -> MFContainer {
             count += 1;
         }
     }
-    println!("{} fichier trouvé", count);
+    if write {scan_to_md2(String::from(path.to_str().unwrap()),&container, count)}
     container // retourne le vecteur
 }
 
