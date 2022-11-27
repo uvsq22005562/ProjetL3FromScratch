@@ -2,6 +2,7 @@ use clap::Parser;
 use projet_l3_2::cli::Cli;
 use projet_l3_2::scan::{scan, write2json};
 use projet_l3_2::search::search;
+use projet_l3_2::playlist;
 use std::path::PathBuf;
 use std::panic;
 
@@ -33,6 +34,17 @@ fn main() {
             }
                 },
             None => {search(args.arg2.unwrap(), false);}
+        }
+    } else if args.command == "playlist" {
+        let mut temp_path = PathBuf::new();
+        temp_path.push(args.arg2.unwrap());
+        match &args.arg4 {
+            Some(s) => { match s as &str {
+                "w" => {playlist::playlist(&temp_path, args.arg3.unwrap(), true);},
+                _ => panic!("invalide 3rd argument -> type w to write the request into md"),
+            }
+            },
+            None => {playlist::playlist(&temp_path, args.arg3.unwrap(), false);}
         }
     }
 }

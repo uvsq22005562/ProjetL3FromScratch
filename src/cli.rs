@@ -8,5 +8,7 @@ pub struct Cli {
     // second argument (scan -> path) (search -> filter)
     pub arg2: Option<String>,
     // 3rd argument w -> écrire dans un md le résultat de la requête
-    pub arg3: Option<String>
+    pub arg3: Option<String>,
+    // uniquement pour playlist
+    pub arg4: Option<String>
 }
