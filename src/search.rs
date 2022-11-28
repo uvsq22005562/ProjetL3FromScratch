@@ -1,7 +1,7 @@
 /// all the functions used to execute the search command
 use std::path::PathBuf;
 use std::fs;
-use crate::m2d::search_to_md2;
+use crate::m2d::{search_to_md2};
 use crate::musicfile::MFContainer;
 
 

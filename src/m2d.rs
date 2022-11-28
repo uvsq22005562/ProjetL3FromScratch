@@ -1,10 +1,11 @@
 /// functions needed to store the request result into a markdown file
 /// todo("rassembler les 3 fontions en une")
-use std::fs::File;
+use std::fs::{File, OpenOptions};
 use std::fs;
+use std::io::Lines;
 use clap::builder::Str;
 use markdown_gen;
-use markdown_gen::markdown::Markdown;
+use markdown_gen::markdown::{AsMarkdown, List, Markdown};
 use crate::musicfile::MFContainer;
 
 
@@ -45,16 +46,22 @@ pub fn search_to_md2(search: String, found: &MFContainer, nb:u32) {
 }
 
 
-pub fn playlist_to_md2(search: String, found:&MFContainer, nb:u32) {
+pub fn playlist_to_md2(search: String, contraint:String, found:&MFContainer, nb:u32) {
     let old_content:String = fs::read_to_string("src/output/request_history.md").unwrap();
     let file:File = File::create("src/output/request_history.md").unwrap();
     let mut md:Markdown<File> = markdown_gen::markdown::Markdown::new(file);
-    let line1:String = "playlist ".to_string() + &search + &" w".to_string();
+
+    let line1:String = "playlist ".to_string() + &search + &" ".to_string() + &contraint + &" w".to_string();
     let line2:String = nb.to_string() + " musique(s) ajoutée(s) a la playlist";
-    md.write(&*old_content).unwrap();
-    md.write(&*line1).unwrap();
-    md.write(&*line2).unwrap();
+    let mut line3:String = String::new();
     for elm in &found.file {
-        md.write(elm.title.as_str()).expect("failed to write into md");
+        line3 += &elm.title;
+        line3 += "\n";
     }
+
+    md.write(&*old_content.replace("\\", ""));
+    md.write(line1.heading(3)).unwrap();
+    md.write(List::new(false)
+        .item(&*line2)
+        .item(&*line3).quote()).unwrap();
 }

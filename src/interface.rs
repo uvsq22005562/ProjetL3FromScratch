@@ -1,3 +1,4 @@
+/// functions used to run the programme without any arg
 use std::fs::read;
 use std::io::{stdin, stdout, Write};
 use std::path::PathBuf;
@@ -8,6 +9,7 @@ use crate::scan::{scan, write2json};
 use crate::search::search;
 
 
+/// launch the interface by printing question, parsing the result and reacting
 pub fn start() {
     print!("1 - scan / 2 - search / 3 - playlist   >>>   ");
     let command:u32 = read_user_input().parse().unwrap();
@@ -43,6 +45,8 @@ pub fn start() {
     }
 }
 
+
+/// read the user input and returns it
 fn read_user_input() -> String {
     let mut res = String::new();
     let _= stdout().flush();

@@ -3,7 +3,7 @@ use m3u;
 use crate::musicfile::MFContainer;
 use std::fs::File;
 use std::path::Path;
-use crate::m2d::playlist_to_md2;
+use crate::m2d::{playlist_to_md2, playlist_to_md22};
 use crate::scan::scan;
 use crate::search::search;
 
@@ -16,8 +16,9 @@ use crate::search::search;
 /// then the function display and write the playlist using create() and display_result()
 pub fn playlist(path: &Path, contraint: String, write:bool) {
     scan(path, false);
-    let search_res = search(contraint, false);
-    if write {playlist_to_md2(String::from(path.to_str().unwrap()),
+    let search_res = search(contraint.clone(), false);
+    if write {playlist_to_md22(String::from(path.to_str().unwrap()),
+                              contraint,
                               &search_res,
                               search_res.file.len() as u32)}
     display_result(&search_res);
