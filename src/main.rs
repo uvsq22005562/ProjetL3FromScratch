@@ -1,3 +1,4 @@
+/// Projet rust L3.S5 informatique - Jules Marty - 22005562
 use clap::Parser;
 use projet_l3_2::cli::Cli;
 use projet_l3_2::scan::{scan, write2json};
@@ -7,15 +8,13 @@ use std::path::PathBuf;
 use std::panic;
 
 
+/// read the arguments and run the corresponding function (scan/search/playlist)
 fn main() {
-    // récupération des entrées de l'user avec module cli
     let args = Cli::parse();
-    // gestion du cas scan
+    // scan command management
     if args.command == "scan" {
-        // conversion du 2nd argument en path
         let mut temp_path = PathBuf::new();
         temp_path.push(args.arg2.unwrap());
-        // création du vect contenant tout les fichiers supportés
         match &args.arg3 {
             Some(s) => { match s as &str {
                 "w" => {let x = scan(&temp_path, true);
@@ -26,15 +25,21 @@ fn main() {
             None => {let x = scan(&temp_path, false);
                 write2json(x);}
         }
+        // search command management
     } else if args.command == "search" {
         match &args.arg3 {
             Some(s) => { match s as &str {
-                "w" => {search(args.arg2.unwrap(), true);},
-                _ => panic!("invalide 3rd argument -> type w to write the request into md"),
-            }
+                "w" => {
+                    search(args.arg2.unwrap(), true);
                 },
-            None => {search(args.arg2.unwrap(), false);}
+                _ => panic!("invalide 3rd argument -> type w to write the request into md"),
+                            }
+            },
+            None => {
+                search(args.arg2.unwrap(), false);
+            }
         }
+        // playlist command management
     } else if args.command == "playlist" {
         let mut temp_path = PathBuf::new();
         temp_path.push(args.arg2.unwrap());

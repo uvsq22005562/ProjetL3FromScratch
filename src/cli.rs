@@ -1,14 +1,15 @@
+/// struct used to parse argument provided to the functions by the user
 use clap::Parser;
 
-#[derive(Parser)]  // offre a la struct le rôle de parser
-#[derive(Debug)]  // permet l'affichage
+
+///the different commands do not have the same number of arguments,
+/// most are therefore optional and the verification of the validity of the input
+/// is checked in the main file when launching the associated functions.
+#[derive(Parser)]
+#[derive(Debug)]
 pub struct Cli {
-    // premier argument
     pub command: String,
-    // second argument (scan -> path) (search -> filter)
     pub arg2: Option<String>,
-    // 3rd argument w -> écrire dans un md le résultat de la requête
     pub arg3: Option<String>,
-    // uniquement pour playlist
     pub arg4: Option<String>
 }

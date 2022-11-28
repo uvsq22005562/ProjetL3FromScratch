@@ -1,8 +1,9 @@
+/// struct used to handle mp3 formats and associated functions
 use std::path::{Path, PathBuf};
 use id3::{Tag, TagLike};
 
 
-// structure de base
+/// represent a single mp3 file, with it's metadata
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct MusicFile {
@@ -15,13 +16,14 @@ pub struct MusicFile {
 
 }
 
-impl MusicFile {
-    pub fn new(path: &Path) -> MusicFile {
-        // création d'un tag ID3 -> contient l'ensemble des metadatas spécifique aux fichiers mp3
-        // !!! on obtient pas les metadata classiques -> a ajouter plus tard.
-        let tag = Tag::read_from_path(path).unwrap();
 
-        // construit l'instance de musicfile
+/// functions implemented for MusicFile
+///     new - constructor
+impl MusicFile {
+
+    /// construct a MusicFile from a given path
+    pub fn new(path: &Path) -> MusicFile {
+        let tag = Tag::read_from_path(path).unwrap();
         let result: MusicFile = MusicFile {
             path: path.to_path_buf(),
             artist: if tag.clone().get("TPE1").is_some() {
@@ -49,15 +51,24 @@ impl MusicFile {
     }
 }
 
+
+/// structure used to hold different instances of Musicfile
+/// (initially thought to facilitate serialization)
 #[derive(Serialize, Deserialize, Debug)]
 pub struct MFContainer {
     pub file: Vec<MusicFile>,
 }
 
+
+/// functions implemented for MFContainer
 impl MFContainer {
+
+    /// constructor
     pub fn new() -> MFContainer {
         MFContainer {file:Vec::new()}
     }
+
+    /// setter
     pub fn add(self: &mut Self, data: MusicFile) {
         self.file.push(data);
     }

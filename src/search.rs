@@ -1,29 +1,20 @@
-use std::path::{PathBuf};
-use std::{fs};  // file system btw
+/// all the functions used to execute the search command
+use std::path::PathBuf;
+use std::fs;
 use crate::m2d::search_to_md2;
 use crate::musicfile::MFContainer;
 
 
-pub fn arg_read(arg: &String) -> Vec<String> {
-    let mut res = Vec::new();
-    for values in arg.split("=") {
-        res.push(values.clone().to_string());
-    }
-    res
-}
-
-pub fn get_metadata() -> MFContainer {
-    let mut new_path = PathBuf::new();
-    new_path.push("src/test/stored_metadata.json");
-    let data = fs::read_to_string(new_path).unwrap();
-    let container:MFContainer = serde_json::from_str(&data).unwrap();
-    container
-}
-
+/// arg - 2nd argument provided by the user, condition to select the mp3 files
+/// write - if true will write summary of query execution
+///
+/// retrieves the metadata of all the files found by scan() and builds an MFcontainer according
+/// to the conditions passed as arguments.
+/// returns the MFcontainer and displays a summary of the execution on the shell.
 pub fn search(arg: String, write:bool) -> MFContainer {
     let mut count:u32 = 0;
-    let argument = arg_read(&arg);
-    let data = get_metadata();
+    let argument:Vec<String> = arg_read(&arg);
+    let data:MFContainer = get_metadata();
     let mut result:MFContainer = MFContainer::new();
     for elm in data.file {
         match argument[0].as_str() {
@@ -35,7 +26,45 @@ pub fn search(arg: String, write:bool) -> MFContainer {
             _ => continue
         }
     }
+    display_result(&result);
     if write {search_to_md2(arg, &result, count)}
     result
+}
 
+
+/// arg - in the form title="title of the music"
+///
+/// return a Vec containing split of the argument to make it easily readable
+/// todo("permettre d'avoir plus d'une condition a la recherche d'une musique")
+pub fn arg_read(arg: &String) -> Vec<String> {
+    let mut res = Vec::new();
+    for values in arg.split("=") {
+        res.push(values.clone().to_string());
+    }
+    res
+}
+
+
+/// deserialize the MFcontainer which was written in the json by scan() and returns it
+/// todo("Message d'erreur si aucun scan n'a été lancé au préalable")
+pub fn get_metadata() -> MFContainer {
+    let mut new_path = PathBuf::new();
+    new_path.push("src/output/last_request.json");
+    match new_path.exists() {
+        false => panic!("Veuillez procéder a un scan avant d'effectuer une recherche"),
+        true => {
+            let data = fs::read_to_string(new_path).unwrap();
+            let container:MFContainer = serde_json::from_str(&data).unwrap();
+            container
+        }
+    }
+}
+
+
+/// writes for the user a summary of the execution of the query in the command interface
+pub fn display_result(data: &MFContainer) {
+    println!(">>> {} fichier(s) correspondant(s) a votre recherche", data.file.len());
+    for elm in &data.file {
+        println!(">>> >>> {:?}", elm.title);
+    }
 }
