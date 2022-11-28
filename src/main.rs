@@ -6,6 +6,7 @@ use projet_l3_2::search::search;
 use projet_l3_2::playlist;
 use std::path::PathBuf;
 use std::panic;
+use projet_l3_2::musicfile::MFContainer;
 
 
 /// read the arguments and run the corresponding function (scan/search/playlist)
@@ -13,16 +14,16 @@ fn main() {
     let args = Cli::parse();
     // scan command management
     if args.command == "scan" {
-        let mut temp_path = PathBuf::new();
+        let mut temp_path:PathBuf = PathBuf::new();
         temp_path.push(args.arg2.unwrap());
         match &args.arg3 {
             Some(s) => { match s as &str {
-                "w" => {let x = scan(&temp_path, true);
+                "w" => {let x:MFContainer = scan(&temp_path, true);
                 write2json(x);},
                 _ => panic!("invalide 3rd argument -> type w to write the request into md"),
             }
             },
-            None => {let x = scan(&temp_path, false);
+            None => {let x:MFContainer = scan(&temp_path, false);
                 write2json(x);}
         }
         // search command management

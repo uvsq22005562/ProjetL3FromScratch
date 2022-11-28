@@ -23,7 +23,7 @@ impl MusicFile {
 
     /// construct a MusicFile from a given path
     pub fn new(path: &Path) -> MusicFile {
-        let tag = Tag::read_from_path(path).unwrap();
+        let tag:Tag = Tag::read_from_path(path).unwrap();
         let result: MusicFile = MusicFile {
             path: path.to_path_buf(),
             artist: if tag.clone().get("TPE1").is_some() {

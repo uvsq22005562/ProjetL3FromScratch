@@ -26,7 +26,7 @@ pub fn scan(path: &Path, write:bool) -> MFContainer {
     let mut count:u32 = 0;
     let mut container:MFContainer = MFContainer::new();
     for entry in WalkDir::new(path) {
-        let temp = entry.as_ref().unwrap();
+        let temp:&DirEntry = entry.as_ref().unwrap();
         if is_supported(&temp) {
             let y = MusicFile::new(temp.path());
             container.add(y);
@@ -43,7 +43,7 @@ pub fn scan(path: &Path, write:bool) -> MFContainer {
 pub fn write2json(data: MFContainer) {
     let mut new_path: PathBuf = PathBuf::new();
     new_path.push("src/output/last_request.json");
-    let mut file = File::create(new_path).expect("Cannot create json");
+    let mut file:File = File::create(new_path).expect("Cannot create json");
     match file.write_all(serde_json::to_string(&data).unwrap().as_bytes()) {
         Err(e) => println!("{:?}", e),
         _=> ()

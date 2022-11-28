@@ -37,7 +37,7 @@ pub fn search(arg: String, write:bool) -> MFContainer {
 /// return a Vec containing split of the argument to make it easily readable
 /// todo("permettre d'avoir plus d'une condition a la recherche d'une musique")
 pub fn arg_read(arg: &String) -> Vec<String> {
-    let mut res = Vec::new();
+    let mut res:Vec<String> = Vec::new();
     for values in arg.split("=") {
         res.push(values.clone().to_string());
     }
