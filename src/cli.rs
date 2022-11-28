@@ -8,7 +8,7 @@ use clap::Parser;
 #[derive(Parser)]
 #[derive(Debug)]
 pub struct Cli {
-    pub command: String,
+    pub command: Option<String>,
     pub arg2: Option<String>,
     pub arg3: Option<String>,
     pub arg4: Option<String>

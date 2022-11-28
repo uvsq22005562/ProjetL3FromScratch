@@ -10,3 +10,4 @@ pub mod musicfile;
 pub mod search;
 pub mod m2d;
 pub mod playlist;
+pub mod interface;
