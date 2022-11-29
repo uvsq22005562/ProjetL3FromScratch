@@ -26,7 +26,6 @@ pub fn playlist(path: &Path, contraint: String, write:bool) {
 }
 
 
-/// todo("ajouter le nom de la playlist afin de nommer le fichier créer")
 /// function that will write the content of the playlist to an m3u file that can be read by vlc
 pub fn create(data: MFContainer) {
     let mut playlist = Vec::new();
