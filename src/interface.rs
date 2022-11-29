@@ -1,8 +1,6 @@
 /// functions used to run the programme without any arg
-use std::fs::read;
 use std::io::{stdin, stdout, Write};
 use std::path::PathBuf;
-use clap::Parser;
 use crate::musicfile::MFContainer;
 use crate::playlist::playlist;
 use crate::scan::{scan, write2json};
@@ -14,7 +12,7 @@ pub fn start() {
     print!("1 - scan / 2 - search / 3 - playlist   >>>   ");
     let command:u32 = read_user_input().parse().unwrap();
     print!("souhaitez vous conserver le résultat de la requête dans un fichier markdown ?  1 - oui / 2 - non  >>>  ");
-    let mut write:bool;
+    let write:bool;
     match read_user_input().parse().unwrap() {
         1 => write = true,
         2 => write = false,
@@ -31,8 +29,8 @@ pub fn start() {
     // search
     } else if command == 2 {
         print!("write a filter >>>  ");
-        let mut filter:String = read_user_input();
-        let data:MFContainer = search(filter, write);
+        let  filter:String = read_user_input();
+        let _data:MFContainer = search(filter, write);
 
     // playlist
     } else if command == 3 {
@@ -40,7 +38,7 @@ pub fn start() {
         let mut path:PathBuf = PathBuf::new();
         path.push(read_user_input());
         print!("write a correct filter >>> ");
-        let mut filter:String = read_user_input();
+        let filter:String = read_user_input();
         playlist(&path, filter, write);
     }
 }

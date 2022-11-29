@@ -4,7 +4,7 @@ use id3::{Tag, TagLike};
 
 
 /// represent a single mp3 file, with it's metadata
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct MusicFile {
     pub path: PathBuf,

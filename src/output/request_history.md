@@ -1,4 +1,4 @@
-### playlist C:\\Users\\jules\\Documents\\rust\_project\\projet\_L3\_2\\src\\test title=imdat\.\. w
+### playlist src/test title=imdat\.\. w
 ###### 1 musique\(s\) ajoutée\(s\) a la playlist
 
 >

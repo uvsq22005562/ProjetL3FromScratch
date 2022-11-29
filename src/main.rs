@@ -1,6 +1,5 @@
 /// Projet rust L3.S5 informatique - Jules Marty - 22005562
 /// todo(): pour la fonction playlist, faire en sorte que le chemin relatif soit (fichier par fichier transfomrmé en absolut)
-/// todo(): revoir la syntaxe du fichier markdown
 use clap::Parser;
 use projet_l3_2::cli::Cli;
 use projet_l3_2::interface::start;

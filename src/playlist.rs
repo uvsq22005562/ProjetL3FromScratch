@@ -1,15 +1,16 @@
+use std::fs;
 /// all the functions used to create playlist and write it into a m3u file
 use m3u;
 use crate::musicfile::MFContainer;
 use std::fs::File;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use crate::m2d::{playlist_to_md2};
 use crate::scan::scan;
 use crate::search::search;
 
 
 /// path - will be changed to the name of the playlist
-/// contraint - todo("changer en option") conditions needed to add a song to the playlist
+/// contraint - conditions needed to add a song to the playlist
 /// write - if true will write summary of query execution
 ///
 /// generate the MFcontainer corresponding to the asked playlist using the scan and search functions.
@@ -30,7 +31,8 @@ pub fn playlist(path: &Path, contraint: String, write:bool) {
 pub fn create(data: MFContainer) {
     let mut playlist = Vec::new();
     for elm in data.file {
-        playlist.push(m3u::path_entry(elm.path))
+        let absolute_path:PathBuf = fs::canonicalize(elm.path).unwrap();
+        playlist.push(m3u::path_entry(absolute_path))
     }
     let mut file:File = File::create("src/output/playlist.m3u").unwrap();
     let mut writer = m3u::Writer::new(&mut file);

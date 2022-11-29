@@ -1,12 +1,8 @@
 /// functions needed to store the request result into a markdown file
-use std::fs::{File, OpenOptions};
-use std::fs;
-use std::io::Lines;
-use clap::builder::Str;
+use std::fs::File;
 use markdown_gen;
 use markdown_gen::markdown::{AsMarkdown, List, Markdown};
 use crate::musicfile::MFContainer;
-use std::time;
 
 
 /// search - user input (to store the original request)
