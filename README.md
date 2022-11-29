@@ -53,20 +53,23 @@
 >
 > > cargo run command arg2 arg3 arg4
 > 
-> **command** correspond aux 3 tâches disponibles dans le programme :  
+> **command** correspond aux 4 tâches disponibles dans le programme :  
 > * scan
 > * search
 > * playlist
+> * tag
 >  
 > **arg2** varie en fonction de la 1ʳᵉ commande utilisée :
 > * scan src/test . . . .*un path dans le cas de scan*
 > * search title="titre_chanson" . . . .*une contrainte dans le cas de search*
-> * playlist src/test . . . .*un path dans le cas de playlist*  
+> * playlist src/test . . . .*un path dans le cas de playlist*
+> * tag album="nom_album" . . . .*une contrainte dans le cas de tag*
 >  
 > **arg3** suis le même fonctionnement :
 > * scan src/test w . . . .*(optionnel) choix d'écrire le résultat de la requête*
 > * search title="titre_chanson" . . . .*(optionnel) choix d'écrire le résultat de la requête*
-> * playlist src/test title="titre_chanson" . . . .*(obligatoire) contrainte pour la sélection dans la playlist*  
+> * playlist src/test title="titre_chanson" . . . .*(obligatoire) contrainte pour la sélection dans la playlist*
+> * tag album="nom_album" album="nouveau_nom" . . . .*(obligatoire) tag a changer et son remplacement*
 >   
 > **arg4** utilisé uniquement dans le cas de playlist :
 > * playlist src/test title="titre_chanson" w . . . .*(optionnel) choix d'écrire le résultat de la requête*
@@ -91,3 +94,6 @@
 > 
 > > **interface** module lancé lorsque le programme ne détecte aucun argument, c'est une simple ihm question/réponse
 > qui est ammené a lancer une des 3 requète disponible.
+> 
+> > **tag** contient la fonction permettant de modifier un tag précis sur un ensemble de fichier
+> sélectionnés a l'aide d'une contrainte.

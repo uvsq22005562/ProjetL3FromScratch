@@ -9,6 +9,7 @@ use projet_l3_2::playlist;
 use std::path::PathBuf;
 use std::panic;
 use projet_l3_2::musicfile::MFContainer;
+use projet_l3_2::tag::add_tag;
 
 
 /// read the arguments and run the corresponding function (scan/search/playlist)
@@ -56,5 +57,8 @@ fn main() {
             },
             None => {playlist::playlist(&temp_path, args.arg3.unwrap(), false);}
         }
+    } else if args.command == Some("tag".to_string()) {
+        let files = search(args.arg2.unwrap(), false);
+        add_tag(files, args.arg3.unwrap());
     }
 }

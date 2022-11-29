@@ -5,11 +5,12 @@ use crate::musicfile::MFContainer;
 use crate::playlist::playlist;
 use crate::scan::{scan, write2json};
 use crate::search::search;
+use crate::tag::add_tag;
 
 
 /// launch the interface by printing question, parsing the result and reacting
 pub fn start() {
-    print!("1 - scan / 2 - search / 3 - playlist   >>>   ");
+    print!("1 - scan / 2 - search / 3 - playlist  / 4 - tag >>>   ");
     let command:u32 = read_user_input().parse().unwrap();
     print!("souhaitez vous conserver le résultat de la requête dans un fichier markdown ?  1 - oui / 2 - non  >>>  ");
     let write:bool;
@@ -40,6 +41,12 @@ pub fn start() {
         print!("write a correct filter >>> ");
         let filter:String = read_user_input();
         playlist(&path, filter, write);
+    } else if command == 4 {
+        print!("write a filter  >>>  ");
+        let filter:String = read_user_input();
+        print!("write a replacement line  >>> ");
+        let replace:String = read_user_input();
+        add_tag(search(filter, false), replace);
     }
 }
 

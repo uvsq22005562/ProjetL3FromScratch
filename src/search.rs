@@ -35,7 +35,6 @@ pub fn search(arg: String, write:bool) -> MFContainer {
 /// arg - in the form title="title of the music"
 ///
 /// return a Vec containing split of the argument to make it easily readable
-/// todo("permettre d'avoir plus d'une condition a la recherche d'une musique")
 pub fn arg_read(arg: &String) -> Vec<String> {
     let mut res:Vec<String> = Vec::new();
     for values in arg.split("=") {
@@ -46,7 +45,6 @@ pub fn arg_read(arg: &String) -> Vec<String> {
 
 
 /// deserialize the MFcontainer which was written in the json by scan() and returns it
-/// todo("Message d'erreur si aucun scan n'a été lancé au préalable")
 pub fn get_metadata() -> MFContainer {
     let mut new_path = PathBuf::new();
     new_path.push("src/output/last_request.json");
