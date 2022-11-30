@@ -16,7 +16,7 @@ use projet_l3_2::tag::add_tag;
 fn main() {
     let args = Cli::parse();
     // scan command management
-    if args.command == None {
+    if args.command.is_none() {
         start();
     } else if args.command == Some("scan".to_string()) {
         let mut temp_path:PathBuf = PathBuf::new();

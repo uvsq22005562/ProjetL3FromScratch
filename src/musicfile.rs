@@ -4,7 +4,7 @@ use id3::{Tag, TagLike};
 
 
 /// represent a single mp3 file, with it's metadata
-#[derive(Serialize, Deserialize, Debug, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct MusicFile {
     pub path: PathBuf,
@@ -25,24 +25,24 @@ impl MusicFile {
         let tag:Tag = Tag::read_from_path(path).unwrap();
         let result: MusicFile = MusicFile {
             path: path.to_path_buf(),
-            artist: if tag.clone().get("TPE1").is_some() {
-                tag.clone().get("TPE1").unwrap().content().
+            artist: if tag.get("TPE1").is_some() {
+                tag.get("TPE1").unwrap().content().
                     text().unwrap().to_string()
             } else { "inconnu".to_string() },
-            album: if tag.clone().get("TALB").is_some() {
-                tag.clone().get("TALB").unwrap().content().
+            album: if tag.get("TALB").is_some() {
+                tag.get("TALB").unwrap().content().
                     text().unwrap().to_string()
             } else { "inconnu".to_string() },
-            title: if tag.clone().get("TIT2").is_some() {
-                tag.clone().get("TIT2").unwrap().content().
+            title: if tag.get("TIT2").is_some() {
+                tag.get("TIT2").unwrap().content().
                     text().unwrap().to_string()
             } else { "inconnu".to_string() },
-            year: if tag.clone().get("TDRC").is_some() {
-                tag.clone().get("TDRC").unwrap().content().
+            year: if tag.get("TDRC").is_some() {
+                tag.get("TDRC").unwrap().content().
                     text().unwrap().to_string()
             } else { "inconnu".to_string() },
-            numero: if tag.clone().get("TRCK").is_some() {
-                tag.clone().get("TRCK").unwrap().content().
+            numero: if tag.get("TRCK").is_some() {
+                tag.get("TRCK").unwrap().content().
                     text().unwrap().to_string()
             } else { "inconnu".to_string() },
         };
@@ -70,5 +70,12 @@ impl MFContainer {
     /// setter
     pub fn add(self: &mut Self, data: MusicFile) {
         self.file.push(data);
+    }
+}
+
+
+impl Default for MFContainer {
+    fn default() -> Self {
+        Self::new()
     }
 }

@@ -16,7 +16,7 @@ pub fn scan_to_md2(search: String, found: &MFContainer, nb:u32) {
     let file:File = File::create("src/output/request_history.md").unwrap();
     let mut md:Markdown<File> = markdown_gen::markdown::Markdown::new(file);
 
-    let line1:String = "scan ".to_string() + &search + &" w".to_string();
+    let line1:String = "scan ".to_string() + &search + " w";
     let line2:String = nb.to_string() + " fichier(s) supporté(s)";
 
     write2md(&mut md, vec![line1, line2], found);
@@ -29,7 +29,7 @@ pub fn search_to_md2(search: String, found: &MFContainer, nb:u32) {
     let file:File = File::create("src/output/request_history.md").unwrap();
     let mut md:Markdown<File> = markdown_gen::markdown::Markdown::new(file);
 
-    let line1:String = "search ".to_string() + &search + &" w".to_string();
+    let line1:String = "search ".to_string() + &search + " w";
     let line2:String = nb.to_string() + " correspondance(s)";
 
     write2md(&mut md, vec![line1, line2], found);
@@ -41,7 +41,7 @@ pub fn playlist_to_md2(search: String, contraint:String, found:&MFContainer, nb:
     let file:File = File::create("src/output/request_history.md").unwrap();
     let mut md:Markdown<File> = markdown_gen::markdown::Markdown::new(file);
 
-    let line1:String = "playlist ".to_string() + &search + &" ".to_string() + &contraint + &" w".to_string();
+    let line1:String = "playlist ".to_string() + &search + " " + &contraint + " w";
     let line2:String = nb.to_string() + " musique(s) ajoutée(s) a la playlist";
     write2md(&mut md, vec![line1, line2], found);
 }
@@ -58,13 +58,13 @@ pub fn write2md(md:&mut Markdown<File>, headers:Vec<String>, data:&MFContainer) 
     for elm in &data.file {
         let mut line3:String = String::new();
         line3 += &elm.title;
-        line3 += &(" --> artist : ".to_string() + &elm.artist + &" album : " + &elm.album);
+        line3 += &(" --> artist : ".to_string() + &elm.artist + " album : " + &elm.album);
         md.write(List::new(false)
             .item(&*("titre -> ".to_string() + &elm.title))
             .item(&*("artiste -> ".to_string() + &elm.artist))
             .item(&*("album -> ".to_string() + &elm.album))
             .item(&*("année -> ".to_string() + &elm.year))
             .item(&*("numéro de track -> ".to_string() + &elm.numero))
-            .item(*&elm.path.to_str().unwrap()).quote()).unwrap()
+            .item(elm.path.to_str().unwrap()).quote()).unwrap()
     }
 }

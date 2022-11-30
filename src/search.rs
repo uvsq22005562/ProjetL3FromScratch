@@ -18,11 +18,11 @@ pub fn search(arg: String, write:bool) -> MFContainer {
     let mut result:MFContainer = MFContainer::new();
     for elm in data.file {
         match argument[0].as_str() {
-            "album" => if &elm.album == &argument[1]{result.add(elm); count +=1;},
-            "artist" => if &elm.artist == &argument[1]{result.add(elm); count +=1;},
-            "title" => if &elm.title == &argument[1]{result.add(elm); count +=1;},
-            "year" => if &elm.year == &argument[1]{result.add(elm); count +=1;},
-            "numero" => if &elm.numero == &argument[1]{result.add(elm); count +=1;},
+            "album" => if elm.album == argument[1]{result.add(elm); count +=1;},
+            "artist" => if elm.artist == argument[1]{result.add(elm); count +=1;},
+            "title" => if elm.title == argument[1]{result.add(elm); count +=1;},
+            "year" => if elm.year == argument[1]{result.add(elm); count +=1;},
+            "numero" => if elm.numero == argument[1]{result.add(elm); count +=1;},
             _ => continue
         }
     }
@@ -35,10 +35,10 @@ pub fn search(arg: String, write:bool) -> MFContainer {
 /// arg - in the form title="title of the music"
 ///
 /// return a Vec containing split of the argument to make it easily readable
-pub fn arg_read(arg: &String) -> Vec<String> {
+pub fn arg_read(arg: &str) -> Vec<String> {
     let mut res:Vec<String> = Vec::new();
-    for values in arg.split("=") {
-        res.push(values.clone().to_string());
+    for values in arg.split('=') {
+        res.push(values.to_string());
     }
     res
 }

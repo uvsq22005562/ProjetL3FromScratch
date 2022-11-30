@@ -13,12 +13,11 @@ pub fn start() {
     print!("1 - scan / 2 - search / 3 - playlist  / 4 - tag >>>   ");
     let command:u32 = read_user_input().parse().unwrap();
     print!("souhaitez vous conserver le résultat de la requête dans un fichier markdown ?  1 - oui / 2 - non  >>>  ");
-    let write:bool;
-    match read_user_input().parse().unwrap() {
-        1 => write = true,
-        2 => write = false,
+    let write:bool = match read_user_input().parse().unwrap() {
+        1 => true,
+        2 => false,
         _ => panic!("veuillez saisir une valeur correcte parmi (1, 2)")
-    }
+    };
     // scan
     if command == 1 {
         print!("enter a correct path :  >>>  ");
