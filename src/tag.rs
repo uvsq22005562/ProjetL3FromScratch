@@ -1,6 +1,5 @@
-use clap::error::ContextValue::Strings;
 use id3::{Tag, TagLike, Version, Frame};
-use crate::musicfile::{MusicFile, MFContainer};
+use crate::musicfile::MFContainer;
 
 
 /// function used to modify a precise tag from a mp3 file
@@ -21,6 +20,6 @@ pub fn add_tag(data: MFContainer, to_change:String) {
     for elm in data.file {
         let mut tag = Tag::read_from_path(&elm.path).unwrap();
         tag.add_frame(Frame::text(tag_id, readed_arg[1]));
-        tag.write_to_path(elm.path, Version::Id3v24);
+        tag.write_to_path(elm.path, Version::Id3v24).unwrap();
     }
 }

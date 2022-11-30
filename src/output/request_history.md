@@ -1,29 +1,20 @@
-### scan src/test w
-###### 3 fichier\(s\) supporté\(s\)
+### playlist src/test album=ogsan\_vol1 w
+###### 2 musique\(s\) ajoutée\(s\) a la playlist
 
 >
->   * titre \-> abc
->   * artiste \-> inconnu
->   * album \-> tinquiete
+>   * titre \-> PROMOTION
+>   * artiste \-> deen\_burbigo
+>   * album \-> ogsan\_vol1
 >   * année \-> inconnu
->   * numéro de track \-> 23
->   * src/test\\Future \- IM DAT N\_\_\_\_ \(Official Music Video\)\.mp3
-
-
->
->   * titre \-> abc
->   * artiste \-> inconnu
->   * album \-> tinquiete
->   * année \-> inconnu
->   * numéro de track \-> 23
->   * src/test\\PunchDeck\-ICantStop\.mp3
+>   * numéro de track \-> 05
+>   * src/test\\05 \- PROMOTION\.mp3
 
 
 >
->   * titre \-> abc
->   * artiste \-> inconnu
->   * album \-> tinquiete
+>   * titre \-> SMITH
+>   * artiste \-> deen\_burbigo
+>   * album \-> ogsan\_vol1
 >   * année \-> inconnu
->   * numéro de track \-> 23
->   * src/test\\sous\_dossier1\\Future \- IM DAT N\_\_\_\_ \(Official Music Video\)\.mp3
+>   * numéro de track \-> 06
+>   * src/test\\06 \- SMITH\.mp3
 
